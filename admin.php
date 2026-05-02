@@ -10,12 +10,11 @@ if (!isset($_SESSION['id_users'])) {
     exit();
 }
 
-$conn = new Database();
 $id_users_login = $_SESSION['id_users'];
 
 // Ambil data user beserta id_admin
 $query = "SELECT u.*, a.id_admin 
-          FROM users u
+          FROM users u  
           JOIN admin a ON u.id_users = a.id_users 
           WHERE u.id_users = ?";
 $stmt = $conn->getConn()->prepare($query);
@@ -237,8 +236,8 @@ try {
                     </div>
                 </div>
                 <div>
-                    <label class="block text-sm font-bold text-brand-gray mb-1">URL Foto Produk</label>
-                    <input type="url" name="foto_produk" placeholder="https://..." class="w-full px-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red">
+                    <label class="block text-sm font-bold text-brand-gray mb-1">Foto Produk</label>
+                    <input type="file" name="foto_produk" class="w-full px-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red">
                 </div>
                 <div class="flex items-center gap-2 mt-2">
                     <input type="checkbox" name="status_tersedia" id="status" checked class="w-4 h-4 text-brand-red focus:ring-brand-red rounded">
