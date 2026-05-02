@@ -10,15 +10,15 @@ if (!isset($_SESSION['id_users'])) {
     exit();
 }
 
-global $conn;
+$conn = new Database();
 $id_users_login = $_SESSION['id_users'];
 
 // Ambil data user beserta id_admin
 $query = "SELECT u.*, a.id_admin 
-          FROM users u 
+          FROM users u
           JOIN admin a ON u.id_users = a.id_users 
           WHERE u.id_users = ?";
-$stmt = $conn->prepare($query);
+$stmt = $conn->getConn()->prepare($query);
 $stmt->bind_param("s", $id_users_login);
 $stmt->execute();
 $data_login = $stmt->get_result()->fetch_assoc();
