@@ -22,4 +22,5 @@ class Database
         return $this->conn;
     }
 }
+$conn = new Database();
 ?>
