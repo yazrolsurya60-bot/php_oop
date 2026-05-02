@@ -43,7 +43,7 @@ class User extends Database
         session_start();
         session_unset();
         session_destroy();
-        return true;
+        return true
     }
 
     public function updateProfile($nama, $alamat, $foto_profil)
