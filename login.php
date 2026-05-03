@@ -129,7 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 class="text-white text-2xl font-extrabold flex items-center gap-3 w-fit hover:opacity-80 transition-opacity">
                 <div
                     class="w-10 h-10 bg-brand-red rounded-lg flex items-center justify-center text-white text-lg shadow-[0_4px_14px_rgba(230,57,70,0.4)]">
-                    <i class="fa-solid fa-mug-hot"></i>
+                    <img src="images/Oak_Coffe.png" class="object-cover rounded-lg w-full h-full" alt="Logo Kafe">
                 </div>
                 Oak Coffee
             </a>
