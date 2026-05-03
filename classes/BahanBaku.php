@@ -1,6 +1,6 @@
 <?php
 
-class BahanBaku
+class BahanBaku extends Database
 {
     private $id_bahan_baku;
     private $nama_bahan_baku;
@@ -21,8 +21,7 @@ class BahanBaku
 
     public function cekStok()
     {
-        global $conn;
-        $stmt = $conn->prepare("SELECT stok FROM bahan_baku WHERE id_bahan_baku = ?");
+        $stmt = $this->conn->prepare("SELECT stok FROM bahan_baku WHERE id_bahan_baku = ?");
         $stmt->bind_param("i", $this->id_bahan_baku);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -31,7 +30,7 @@ class BahanBaku
         if ($row && isset($row['stok'])) {
             $this->stok = $row['stok'];
         }
-        
+
         return $this->stok;
     }
 }
