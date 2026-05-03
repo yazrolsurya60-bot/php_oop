@@ -1,6 +1,5 @@
 <?php
-
-class AntrianDapur
+class AntrianDapur extends Database
 {
     private $id_antrian;
     private $status_antrian;
@@ -13,16 +12,14 @@ class AntrianDapur
 
     public function tambahKeAntrian($id_pesanan)
     {
-        global $conn;
-        $stmt = $conn->prepare("INSERT INTO antrian_dapur (id_pesanan, status_antrian) VALUES (?, 'Menunggu')");
+        $stmt = $this->conn->prepare("INSERT INTO antrian_dapur (id_pesanan, status_antrian) VALUES (?, 'Menunggu')");
         $stmt->bind_param("i", $id_pesanan);
         return $stmt->execute();
     }
 
     public function updateStatus($status_baru)
     {
-        global $conn;
-        $stmt = $conn->prepare("UPDATE antrian_dapur SET status_antrian = ? WHERE id_antrian = ?");
+        $stmt = $this->conn->prepare("UPDATE antrian_dapur SET status_antrian = ? WHERE id_antrian = ?");
         $stmt->bind_param("si", $status_baru, $this->id_antrian);
         $berhasil = $stmt->execute();
 
