@@ -20,12 +20,19 @@ $error_msg = '';
 // Handle POST Actions
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     if ($_POST['action'] === 'tambah_bahan') {
+        $namaFoto = '';
+        if (isset($_FILES['foto_bahan_baku']) && $_FILES['foto_bahan_baku']['error'] !== 4) {
+            $result = $admin->uploadGambar($_FILES['foto_bahan_baku']);
+            if ($result !== false) $namaFoto = $result;
+        }
+
         $bahanData = [
+            'id_bahan_baku'   => $admin->generateIdBahanBaku(),
             'nama_bahan_baku' => $_POST['nama_bahan_baku'],
             'stok'            => $_POST['stok'],
             'satuan'          => $_POST['satuan'],
             'harga_beli'      => $_POST['harga_beli'],
-            'foto_bahan_baku' => ''
+            'foto_bahan_baku' => $namaFoto
         ];
         if ($admin->tambahBahanBaku($bahanData)) {
             $success_msg = 'Bahan baku berhasil ditambahkan!';
@@ -33,10 +40,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             $error_msg = 'Gagal menambahkan bahan baku.';
         }
     } elseif ($_POST['action'] === 'edit_bahan') {
+        $namaFotoBaru = '';
+        if (isset($_FILES['foto_bahan_edit']) && $_FILES['foto_bahan_edit']['error'] !== 4) {
+            $result = $admin->uploadGambar($_FILES['foto_bahan_edit']);
+            if ($result !== false) $namaFotoBaru = $result;
+        }
+
         $newData = [
             'nama_bahan_baku' => $_POST['nama_bahan_baku'],
             'stok'            => $_POST['stok'],
+            'satuan'          => $_POST['satuan'],
             'harga_beli'      => $_POST['harga_beli'],
+            'foto_bahan_baku' => $namaFotoBaru
         ];
         if ($admin->editBahanBaku($_POST['id_bahan_edit'], $newData)) {
             $success_msg = 'Bahan baku berhasil diperbarui!';
@@ -172,7 +187,10 @@ function getStatusBadge($stok, $satuan) {
                         <?php foreach ($bahan_list as $b): ?>
                             <tr class="hover:bg-brand-offwhite/50 transition-colors">
                                 <td class="p-4">
-                                    <p class="font-bold text-brand-black"><?php echo htmlspecialchars($b['nama_bahan_baku']); ?></p>
+                                    <div class="flex items-center gap-3">
+                                        <img src="images/<?php echo htmlspecialchars($b['foto_bahan_baku'] ?: 'default.png'); ?>" alt="Foto" class="w-10 h-10 rounded-lg object-cover border border-gray-200" onerror="this.src='https://via.placeholder.com/150'">
+                                        <p class="font-bold text-brand-black"><?php echo htmlspecialchars($b['nama_bahan_baku']); ?></p>
+                                    </div>
                                 </td>
                                 <td class="p-4">
                                     <span class="text-2xl font-black text-brand-black"><?php echo number_format($b['stok'], 0, ',', '.'); ?></span>
@@ -202,7 +220,7 @@ function getStatusBadge($stok, $satuan) {
                 <h3 class="text-xl font-extrabold">Tambah Bahan Baku</h3>
                 <button onclick="document.getElementById('modalTambah').classList.add('hidden')" class="text-brand-gray hover:text-brand-red"><i class="fa-solid fa-xmark text-xl"></i></button>
             </div>
-            <form action="" method="POST" class="p-6 flex flex-col gap-4">
+            <form action="" method="POST" enctype="multipart/form-data" class="p-6 flex flex-col gap-4">
                 <input type="hidden" name="action" value="tambah_bahan">
                 <div>
                     <label class="block text-sm font-bold text-brand-gray mb-1">Nama Bahan Baku</label>
@@ -229,6 +247,10 @@ function getStatusBadge($stok, $satuan) {
                     <label class="block text-sm font-bold text-brand-gray mb-1">Harga Beli (Rp)</label>
                     <input type="number" name="harga_beli" min="0" class="w-full px-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red">
                 </div>
+                <div>
+                    <label class="block text-sm font-bold text-brand-gray mb-1">Foto Bahan Baku</label>
+                    <input type="file" name="foto_bahan_baku" accept="image/jpg,image/jpeg,image/png" class="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm">
+                </div>
                 <div class="mt-2 flex gap-3">
                     <button type="button" onclick="document.getElementById('modalTambah').classList.add('hidden')" class="flex-1 px-4 py-3 rounded-xl font-bold text-brand-gray bg-gray-100 hover:bg-gray-200 transition-colors">Batal</button>
                     <button type="submit" class="flex-1 px-4 py-3 rounded-xl font-bold text-white bg-brand-red shadow-[0_4px_14px_rgba(230,57,70,0.4)] hover:bg-brand-darkred transition-colors">Simpan</button>
@@ -244,7 +266,7 @@ function getStatusBadge($stok, $satuan) {
                 <h3 class="text-xl font-extrabold">Edit Bahan Baku</h3>
                 <button onclick="document.getElementById('modalEdit').classList.add('hidden')" class="text-brand-gray hover:text-brand-red"><i class="fa-solid fa-xmark text-xl"></i></button>
             </div>
-            <form action="" method="POST" class="p-6 flex flex-col gap-4">
+            <form action="" method="POST" enctype="multipart/form-data" class="p-6 flex flex-col gap-4">
                 <input type="hidden" name="action" value="edit_bahan">
                 <input type="hidden" name="id_bahan_edit" id="edit_id_bahan">
                 <div>
@@ -257,8 +279,26 @@ function getStatusBadge($stok, $satuan) {
                         <input type="number" name="stok" id="edit_stok" min="0" class="w-full px-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red">
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-brand-gray mb-1">Harga Beli (Rp)</label>
-                        <input type="number" name="harga_beli" id="edit_harga_beli" min="0" class="w-full px-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red">
+                        <label class="block text-sm font-bold text-brand-gray mb-1">Satuan</label>
+                        <select name="satuan" id="edit_satuan" class="w-full px-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red">
+                            <option value="g">g (Gram)</option>
+                            <option value="ml">ml (Mililiter)</option>
+                            <option value="kg">kg (Kilogram)</option>
+                            <option value="L">L (Liter)</option>
+                            <option value="pcs">pcs</option>
+                            <option value="bks">bks (Bungkus)</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-brand-gray mb-1">Harga Beli (Rp)</label>
+                    <input type="number" name="harga_beli" id="edit_harga_beli" min="0" class="w-full px-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-brand-gray mb-1">Ganti Foto <span class="text-xs text-gray-400">(opsional)</span></label>
+                    <div class="flex items-center gap-3">
+                        <img id="edit_foto_preview" src="" alt="" class="w-12 h-12 rounded-lg object-cover border border-gray-200 hidden">
+                        <input type="file" name="foto_bahan_edit" accept="image/jpg,image/jpeg,image/png" onchange="previewFotoEdit(this)" class="flex-1 px-4 py-2 border border-gray-200 rounded-xl text-sm">
                     </div>
                 </div>
                 <div class="mt-2 flex gap-3">
@@ -291,13 +331,36 @@ function getStatusBadge($stok, $satuan) {
             document.getElementById('edit_id_bahan').value = b.id_bahan_baku;
             document.getElementById('edit_nama_bahan').value = b.nama_bahan_baku;
             document.getElementById('edit_stok').value = b.stok;
+            document.getElementById('edit_satuan').value = b.satuan;
             document.getElementById('edit_harga_beli').value = b.harga_beli;
+
+            var preview = document.getElementById('edit_foto_preview');
+            if (b.foto_bahan_baku) {
+                preview.src = 'images/' + b.foto_bahan_baku;
+                preview.classList.remove('hidden');
+            } else {
+                preview.classList.add('hidden');
+            }
+
             document.getElementById('modalEdit').classList.remove('hidden');
         }
         function openHapusBahan(id, nama) {
             document.getElementById('hapus_id_bahan').value = id;
             document.getElementById('hapus_nama_bahan').textContent = nama;
             document.getElementById('modalHapus').classList.remove('hidden');
+        }
+
+        // Preview foto sebelum diupload di modal edit
+        function previewFotoEdit(input) {
+            var preview = document.getElementById('edit_foto_preview');
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.classList.remove('hidden');
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
         }
     </script>
 </body>
