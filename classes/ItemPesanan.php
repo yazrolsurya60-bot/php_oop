@@ -1,6 +1,6 @@
 <?php
 
-class ItemPesanan
+class ItemPesanan extends Database
 {
     private $id_item;
     private $jumlah;
@@ -21,8 +21,7 @@ class ItemPesanan
     {
         $hasil = $this->jumlah * $this->harga_item;
 
-        global $conn;
-        $stmt = $conn->prepare("UPDATE item_pesanan SET subtotal = ? WHERE id_item = ?");
+        $stmt = $this->conn->prepare("UPDATE item_pesanan SET subtotal = ? WHERE id_item = ?");
         $stmt->bind_param("di", $hasil, $this->id_item);
         $stmt->execute();
 
