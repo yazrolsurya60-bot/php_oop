@@ -90,5 +90,21 @@ class User extends Database
     {
         return $this->foto_profil;
     }
+
+    public function uploadGambar($file)
+    {
+        $namaFile = $file['name'];
+        $error = $file['error'];
+        $tmpName = $file['tmp_name'];
+        if ($error === 4)
+            return "default.png";
+        $ekstensiValid = ['jpg', 'jpeg', 'png'];
+        $ekstensi = strtolower(pathinfo($namaFile, PATHINFO_EXTENSION));
+        if (!in_array($ekstensi, $ekstensiValid))
+            return false;
+        $namaFileBaru = uniqid() . '.' . $ekstensi;
+        move_uploaded_file($tmpName, 'images/' . $namaFileBaru);
+        return $namaFileBaru;
+    }
 }
 ?>
