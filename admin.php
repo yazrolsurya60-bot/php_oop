@@ -99,7 +99,7 @@ $grafik_json_data = json_encode($data_points);
         <div class="p-6 border-b border-white/10 flex items-center gap-3">
             <div
                 class="w-10 h-10 bg-brand-red rounded-lg flex items-center justify-center text-white font-bold text-xl">
-                <i class="fa-solid fa-mug-hot"></i>
+                <img src="images/Oak_Coffe.png" class="object-cover rounded-lg w-full h-full" alt="Logo Kafe">
             </div>
             <span class="text-xl font-bold tracking-tight">Oak Admin</span>
         </div>
@@ -111,10 +111,18 @@ $grafik_json_data = json_encode($data_points);
             <a href="admin_menu.php"
                 class="px-4 py-3 text-gray-400 hover:bg-white/5 hover:text-white rounded-xl font-medium transition-colors flex items-center gap-3"><i
                     class="fa-solid fa-utensils w-5"></i> Manajemen Menu</a>
-            <a href="admin_user.php" class="px-4 py-3 text-gray-400 hover:bg-white/5 hover:text-white rounded-xl font-medium transition-colors flex items-center gap-3"><i class="fa-solid fa-users w-5"></i> Manajemen User</a>
-            <a href="admin_bahan_baku.php" class="px-4 py-3 text-gray-400 hover:bg-white/5 hover:text-white rounded-xl font-medium transition-colors flex items-center gap-3"><i class="fa-solid fa-boxes-stacked w-5"></i> Bahan Baku</a>
-            <a href="admin_laporan.php" class="px-4 py-3 text-gray-400 hover:bg-white/5 hover:text-white rounded-xl font-medium transition-colors flex items-center gap-3"><i class="fa-solid fa-file-invoice-dollar w-5"></i> Laporan Penjualan</a>
-            <a href="admin_profil.php" class="px-4 py-3 text-gray-400 hover:bg-white/5 hover:text-white rounded-xl font-medium transition-colors flex items-center gap-3"><i class="fa-solid fa-user-tie w-5"></i> Profil Owner</a>
+            <a href="admin_user.php"
+                class="px-4 py-3 text-gray-400 hover:bg-white/5 hover:text-white rounded-xl font-medium transition-colors flex items-center gap-3"><i
+                    class="fa-solid fa-users w-5"></i> Manajemen User</a>
+            <a href="admin_bahan_baku.php"
+                class="px-4 py-3 text-gray-400 hover:bg-white/5 hover:text-white rounded-xl font-medium transition-colors flex items-center gap-3"><i
+                    class="fa-solid fa-boxes-stacked w-5"></i> Bahan Baku</a>
+            <a href="admin_laporan.php"
+                class="px-4 py-3 text-gray-400 hover:bg-white/5 hover:text-white rounded-xl font-medium transition-colors flex items-center gap-3"><i
+                    class="fa-solid fa-file-invoice-dollar w-5"></i> Laporan Penjualan</a>
+            <a href="admin_profil.php"
+                class="px-4 py-3 text-gray-400 hover:bg-white/5 hover:text-white rounded-xl font-medium transition-colors flex items-center gap-3"><i
+                    class="fa-solid fa-user-tie w-5"></i> Profil Owner</a>
 
             <a href="logout.php"
                 class="mt-auto px-4 py-3 text-white/50 hover:bg-white/5 hover:text-brand-red rounded-xl font-medium transition-colors flex items-center gap-2">
